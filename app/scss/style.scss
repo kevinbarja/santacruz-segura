@@ -1,0 +1,220 @@
+@import "variables";
+@import "theme";
+
+// Import the styles for each MDC Web component
+@import "@material/drawer/mdc-drawer";
+@import "@material/list/mdc-list";
+@import "@material/top-app-bar/mdc-top-app-bar";
+@import "@material/typography/mdc-typography";
+@import "@material/card/mdc-card";
+@import "@material/layout-grid/mdc-layout-grid";
+@import "@material/dialog/mdc-dialog";
+@import "@material/button/mdc-button";
+@import "@material/tab-bar/mdc-tab-bar";
+@import "@material/tab-scroller/mdc-tab-scroller";
+@import "@material/tab-indicator/mdc-tab-indicator";
+@import "@material/tab/mdc-tab";
+@import "@material/snackbar/mdc-snackbar";
+@import "@material/icon-button/mdc-icon-button";
+
+@import "@material/tab-bar/mdc-tab-bar";
+@import "@material/tab-scroller/mdc-tab-scroller";
+@import "@material/tab-indicator/mdc-tab-indicator";
+@import "@material/tab/mdc-tab";
+
+html {
+  height: 100%;
+}
+
+body {
+  display: flex; // Removes top gap between modal drawer and viewport
+  height: 100vh; // Ensures that permanent drawer extends to bottom of viewport
+  margin: 0; // Removes top gap between top app bar and viewport
+  background: mdc-theme-prop-value(background);
+}
+
+// .mdc-top-app-bar {
+//   @include mdc-top-app-bar-fill-color-accessible(#ed5748);
+//   @include mdc-top-app-bar-icon-ink-color(#ffffff);
+//   //@include mdc-top-app-bar-icon-ink-color(#00000099);
+// }
+
+.main-content {
+  margin: 20px 50px;
+}
+
+//BREAKPOINT min-width:900px
+
+.mdc-top-app-bar__navigation-icon {
+  display: none;
+}
+
+.mdc-top-app-bar {
+  position: absolute !important;
+}
+
+.mdc-top-app-bar__action-item {
+  text-decoration: none;
+  padding: 12px;
+}
+
+.mdc-drawer__header {
+  background: $mdc-theme-primary;
+  padding: 0px;
+}
+
+.ss-header-image {
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 99%;
+}
+
+.ss-header-title {
+  color: #ffffff;
+  margin: 0px;
+  padding: 0px;
+  text-align: center;
+}
+
+.mdc-card {
+  padding: 10px;
+}
+
+.mdc-card hr.mdc-card__divider {
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: none;
+  margin: 0;
+}
+
+.ss-source-info{
+  text-align: right; 
+  font-style: italic; 
+  
+  margin: 3px;
+  padding: 0px;
+}
+
+// margin-right: 15px;
+.mdc-layout-grid {
+  padding: 0px;
+}
+
+.main-content {
+  margin: 15px 25px !important;
+}
+
+.mdc-drawer-app-content {
+  width: 100%;
+  height: 100%;
+}
+
+.target{
+  font-weight: bold;
+  font-size: 2em;
+} 
+
+.easy-button-button {
+  padding:1px;
+}
+
+.leaflet-container {
+  z-index:4;
+}
+
+.mdc-snackbar__action:not(:disabled){
+  color: mdc-theme-prop-value(primary);
+}
+
+.mdc-icon-button {
+  color: white;
+}
+
+.table td,
+.table th
+{
+    text-align:left;
+    vertical-align: top;    
+}
+
+#right,
+.table td + td,
+.table th + th
+{
+    text-align:left;
+}
+
+.iframe-placeholder
+{
+   background: url('data:image/svg+xml;charset=utf-8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 100% 100%"><text fill="%2337966f" x="50%" y="50%" font-family="\'Lucida Grande\', sans-serif" font-size="24" text-anchor="middle">Cargando mapa...</text></svg>') 0px 0px no-repeat;
+}
+
+.legend {
+  padding: 10px;
+  background-color: white;
+  border-radius: 20px;
+}
+
+.facebook-responsive {
+  overflow:hidden;
+  padding-bottom:56.25%;
+  position:relative;
+  height:0;
+}
+
+.facebook-responsive iframe {
+left:0;
+top:0;
+height:100%;
+width:100%;
+position:absolute;
+}
+
+.faq-header {
+  margin-bottom: 10px
+}
+
+.pb-body--hidden {
+  display: none;
+}
+
+.adopt-a-pup-top-navigation {
+  display: flex;
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.adopt-a-pup-tab {
+  @include mdc-tab-text-label-color(white);
+  @include mdc-tab-icon-color(white);
+
+  .mdc-tab__ripple {
+    @include mdc-states(white);
+  }
+}
+
+.adopt-a-pup-tab-indicator {
+  @include mdc-tab-indicator-underline-color(white);
+}
+
+// BREAKPOINT max-width:900px
+
+@media (max-width: 900px) {
+  .mdc-top-app-bar__navigation-icon {
+    display: block;
+    text-decoration: none;
+    padding: 12px;
+  }
+
+  .main-content {
+    margin: 10px 10px !important;
+  }
+}
+
+

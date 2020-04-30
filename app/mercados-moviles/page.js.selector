@@ -1,0 +1,147 @@
+import html from "./page.html";
+import mapDialog from '../common/map/page.html';
+import { Map } from '../common/map/index.js';
+import data from './data.json';
+
+export function open() {
+	document.getElementById('app').innerHTML = html + mapDialog;
+	var markets = data;
+	// Init map.
+	const map = new Map();
+
+	function removeMarkerOnClick(e) {
+		let id = e.sourceTarget.options.title;
+		//Remove from data
+		markets = markets.filter(function(value, index, arr){ return value.id != id;});
+
+		//Remove from map
+		map.eachLayer(function (layer) {
+			if (layer.options.title == id) {
+				map.removeLayer(layer);
+				return false;
+			}
+		});
+	}
+
+	var lastMarket = null;
+	// Render markets.
+	markets.forEach(market => {
+		L.marker(new L.LatLng(market.lat, market.lng), {
+			title: market.id, draggable: false,
+			icon: L.icon({
+				iconRetinaUrl: require('../images/map/marker-local-shipping-icon-2x.png'),
+				iconUrl: require('../images/map/marker-local-shipping-icon.png'),
+				shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+				iconSize: [25, 41],
+				iconAnchor: [12, 41],
+				popupAnchor: [1, -34],
+				tooltipAnchor: [16, -28],
+				shadowSize: [41, 41]
+			})
+		}).on('click', removeMarkerOnClick).addTo(map);
+		lastMarket = market;
+	});
+
+	if (lastMarket != null) {
+		map.setView(L.latLng(lastMarket.lat, lastMarket.lng), 15, { animation: true });
+	}
+
+	map.on('click', function (location) {
+		let id = 1;
+		if (markets.length > 0){
+			id = Math.max.apply(Math, markets.map(function(o) { return o.id; })) + 1;
+		}
+
+		L.marker(location.latlng, {
+			title: id, draggable: false,
+			icon: L.icon({
+				iconRetinaUrl: require('../images/map/marker-person-icon-2x.png'),
+				iconUrl: require('../images/map/marker-person-icon.png'),
+				shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+				iconSize: [25, 41],
+				iconAnchor: [12, 41],
+				popupAnchor: [1, -34],
+				tooltipAnchor: [16, -28],
+				shadowSize: [41, 41]
+			})
+		}).on('click', removeMarkerOnClick).addTo(map);
+
+		markets.push({
+			"id": id,
+			"lat": location.latlng.lat,
+			"lng": location.latlng.lng
+		});
+
+		console.log(markets);
+	});
+
+	L.easyButton({
+		position: 'topleft',
+		states: [{
+			icon: '<span class="material-icons"> cloud_download </span>',
+			title: 'Descargar datos',
+			onClick: function () {
+				var text = JSON.stringify(markets);
+				navigator.clipboard.writeText(text).then(function() {
+				  console.log('Async: Copying to clipboard was successful!');
+				}, function(err) {
+				  console.error('Async: Could not copy text: ', err);
+				});
+
+				// let a = document.createElement('a');
+				// a.href = "data:application/octet-stream," + encodeURIComponent(JSON.stringify(markets));
+				// a.download = 'data.json';
+				// a.click();
+			}
+		}]
+	}).addTo(map);
+
+	return Promise.resolve();
+}
+
+export function close() {
+	return Promise.resolve();
+}
+
+/*
+	// Add leyend to map
+	/*Legend specific*/
+	// var legend = L.control({ position: "bottomleft" });
+
+	// legend.onAdd = function (map) {
+	// 	var div = L.DomUtil.create("div", "legend");
+	// 	div.innerHTML += "<h4>Información para </h4>";
+	// 	div.innerHTML += '<i style="background: #477AC2"></i><span>Water</span><br>';
+	// 	div.innerHTML += '<i style="background: #448D40"></i><span>Forest</span><br>';
+	// 	div.innerHTML += '<i style="background: #E6E696"></i><span>Land</span><br>';
+	// 	div.innerHTML += '<i style="background: #E8E6E0"></i><span>Residential</span><br>';
+	// 	div.innerHTML += '<i style="background: #FFFFFF"></i><span>Ice</span><br>';
+	// 	div.innerHTML += '<i class="icon" style="background-image: url(https://d30y9cdsu7xlg0.cloudfront.net/png/194515-200.png);background-repeat: no-repeat;"></i><span>Grænse</span><br>';
+	// 	return div;
+	// };
+
+	// legend.addTo(map);
+	return Promise.resolve();
+}
+
+function marketFormatUserFriendly(market, tableFormat = true) {
+	if (tableFormat) {
+		return `<table class='table'>` +
+			`<tr> <td><b>Lugar</b> <td><b>:</b> ${market.nombre_lugar}</td>` +
+			`<tr> <td><b>Distrito</b>  <td><b>:</b> ${market.id_distrito}</td>` +
+			`<tr> <td><b>UV</b>  <td><b>:</b> ${market.uv}</td>` +
+			`</table>` +
+			`<div style='text-align:center'>` +
+			`<a target='_blank' href='https://www.google.com/maps/search/?api=1&query=${market.point_y},${market.point_x}'> ¿Cómo llegar?</a>` +
+			`</div>`;
+	} else {
+		return `<div style='text-align:left'>` +
+			`<b>Lugar:</b> ${market.nombre_lugar}<br/>` +
+			`<b>Distrito:</b> ${market.id_distrito}<br/>` +
+			`<b>UV:</b> ${market.uv}<br/>` +
+			`<a target='_blank' href='https://www.google.com/maps/search/?api=1&query=${market.point_y},${market.point_x}'> ¿Cómo llegar?</a>` +
+			`</div>`
+			;
+	}
+}
+*/
